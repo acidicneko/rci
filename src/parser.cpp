@@ -4,10 +4,11 @@
 #include <fstream>
 #include <parser.hpp>
 #include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <vector>
 
 std::vector<token> tokens;
-std::vector<file> files;
 
 // some helper Functions
 
@@ -36,6 +37,17 @@ bool fileExist(std::string filename) {
   }
   file.close();
   return true;
+}
+
+bool folderExist(std::string folderFromFile) {
+  std::filesystem::path my_path = folderFromFile;
+  auto dir = my_path.parent_path();
+  return std::filesystem::is_directory(dir);
+}
+
+std::string getFolderName(std::string fullPath) {
+  std::filesystem::path my_path = fullPath;
+  return my_path.parent_path().string();
 }
 
 // main Functions
@@ -95,29 +107,9 @@ void parser::Lex() {
       temp.currentLocation = tokens[i].value;
       temp.realLocation = tokens[i + 1].value;
       parser::ParseFiles(temp);
-      // files.push_back(temp);
     }
   }
   tokens.clear();
-}
-
-void parser::ParseFiles() {
-  std::string tok;
-  bool pair = false;
-  for (int i = 0; i < files.size(); i++) {
-    std::cout << files[i].currentLocation << " -> " << files[i].realLocation
-              << std::endl;
-    replace(files[i].realLocation, "$HOME", GetEnv("HOME"));
-    if (!fileExist(files[i].currentLocation)) {
-      std::cout << "Bad definition in index.sc!\n"
-                << "File: " << files[i].currentLocation << " doesn't exist.\n"
-                << "Exiting: file not found" << std::endl;
-      // exit(EXIT_FAILURE);
-      return;
-    }
-    Execute("mv " + files[i].currentLocation + " " + files[i].realLocation);
-  }
-  files.clear();
 }
 
 void parser::ParseFiles(file f) {
@@ -128,6 +120,13 @@ void parser::ParseFiles(file f) {
               << "File: " << f.currentLocation << " doesn't exist.\n"
               << "Exiting: file not found" << std::endl;
     exit(EXIT_FAILURE);
+  }
+  if (!folderExist(f.realLocation)) {
+    std::cout << "Folder: " << getFolderName(f.realLocation)
+              << " doesn't exists!\n"
+              << "Creating folder..." << std::endl;
+    std::string mkdirCmd = "mkdir -p " + getFolderName(f.realLocation);
+    Execute(mkdirCmd);
   }
   Execute("mv " + f.currentLocation + " " + f.realLocation);
 }

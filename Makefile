@@ -13,7 +13,7 @@ $(TARGET): $(OFILES)
 
 %.o: %.cpp
 	@echo [CC] $@
-	@$(CC) -I include/ -c $< -o $@
+	@$(CC) -std=c++17 -I include/ -c $< -o $@
 
 clean:
 	@echo [CLEAN]
