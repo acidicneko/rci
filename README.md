@@ -29,13 +29,16 @@ print Installation finished.
 
 - Syntax
 `location of file in Tar package`=`location of file to move to`
+
 The `rci`\'s Parser provide two builtin functions called `print` and `endl`.
+
 `print <string>` is used to print a string to standard output.
+
 `endl` is used to print a new line to standard output. (`print` function is unable to print newlines via `\n` character. Use this instead).
 
 ### Installation?
 Nah mate. It's not even in alpha stage.
-It cannot create required folders.
+
 It cannot execute required commands to install the rice such as `fc-cache -fv` which required sometimes for installing new fonts.
 
 You can try it out and help me develop it :D
@@ -52,5 +55,5 @@ And run `make all` in the project's root. The resulting binary is placed in `bui
 ```
 As `rci` is unable to make folders according to its need, the user themselves have to create folders they specify in `index.sc`.
 
-Arigatou.
+<b>Arigatou.</b>
 
