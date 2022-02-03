@@ -6,24 +6,6 @@
 #include <string>
 #include <vector>
 
-enum TokenType { Null = 0, Filename = 1, Path = 2, Function = 3, String = 4 };
-
-class token {
-public:
-  TokenType type;
-  std::string value;
-  token(TokenType Type, std::string Value) {
-    type = Type;
-    value = Value;
-  }
-};
-
-class file {
-public:
-  std::string currentLocation;
-  std::string realLocation;
-};
-
 std::vector<token> tokens;
 std::vector<file> files;
 
@@ -106,15 +88,14 @@ void parser::Lex() {
       }
     } else if (tokens[i].type == Filename) {
       if (tokens[i + 1].type != Path) {
-        std::cout << "ERROR: expected \"Path\"\n";
+        std::cout << "ERROR: expected \"Path\"" << std::endl;
         return;
       }
       file temp;
       temp.currentLocation = tokens[i].value;
       temp.realLocation = tokens[i + 1].value;
-      files.push_back(temp);
-      std::cout << tokens[i].value << " -> " << tokens[i + 1].value
-                << std::endl;
+      parser::ParseFiles(temp);
+      // files.push_back(temp);
     }
   }
   tokens.clear();
@@ -124,15 +105,29 @@ void parser::ParseFiles() {
   std::string tok;
   bool pair = false;
   for (int i = 0; i < files.size(); i++) {
+    std::cout << files[i].currentLocation << " -> " << files[i].realLocation
+              << std::endl;
     replace(files[i].realLocation, "$HOME", GetEnv("HOME"));
     if (!fileExist(files[i].currentLocation)) {
       std::cout << "Bad definition in index.sc!\n"
                 << "File: " << files[i].currentLocation << " doesn't exist.\n"
-                << "Exiting: file not found\n";
+                << "Exiting: file not found" << std::endl;
       // exit(EXIT_FAILURE);
       return;
     }
     Execute("mv " + files[i].currentLocation + " " + files[i].realLocation);
   }
   files.clear();
+}
+
+void parser::ParseFiles(file f) {
+  std::cout << f.currentLocation << " -> " << f.realLocation << std::endl;
+  replace(f.realLocation, "$HOME", GetEnv("HOME"));
+  if (!fileExist(f.currentLocation)) {
+    std::cout << "Bad definition in index.sc!\n"
+              << "File: " << f.currentLocation << " doesn't exist.\n"
+              << "Exiting: file not found" << std::endl;
+    exit(EXIT_FAILURE);
+  }
+  Execute("mv " + f.currentLocation + " " + f.realLocation);
 }
