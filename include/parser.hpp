@@ -2,7 +2,14 @@
 
 #include <iostream>
 
-enum TokenType { Null = 0, Filename = 1, Path = 2, Function = 3, String = 4 };
+enum TokenType {
+  Null = 0,
+  Filename = 1,
+  Path = 2,
+  Function = 3,
+  String = 4,
+  Command = 5
+};
 
 class token {
 public:

@@ -1,4 +1,4 @@
-#include "utility.hpp"
+#include "pkg.hpp"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -6,51 +6,10 @@
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <utility.hpp>
 #include <vector>
 
 std::vector<token> tokens;
-
-// some helper Functions
-
-bool replace(std::string &str, const std::string &from, const std::string &to) {
-  size_t start_pos = str.find(from);
-  if (start_pos == std::string::npos)
-    return false;
-  str.replace(start_pos, from.length(), to);
-  return true;
-}
-
-std::string GetEnv(std::string variable) {
-  const char *value = getenv(variable.c_str());
-  if (value == nullptr) {
-    return "";
-  }
-  return value;
-}
-
-bool fileExist(std::string filename) {
-  std::ifstream file;
-  file.open(filename);
-  if (!file) {
-    file.close();
-    return false;
-  }
-  file.close();
-  return true;
-}
-
-bool folderExist(std::string folderFromFile) {
-  std::filesystem::path my_path = folderFromFile;
-  auto dir = my_path.parent_path();
-  return std::filesystem::is_directory(dir);
-}
-
-std::string getFolderName(std::string fullPath) {
-  std::filesystem::path my_path = fullPath;
-  return my_path.parent_path().string();
-}
-
-// main Functions
 
 void parser::Parse(std::string line) {
   std::string tok;
@@ -71,6 +30,12 @@ void parser::Parse(std::string line) {
       token temp(TokenType::Function, "endl");
       tokens.push_back(temp);
       expected = Null;
+    } else if (tok == "exec" && expected == Function) {
+      tok = "";
+      token temp(TokenType::Function, "exec");
+      tokens.push_back(temp);
+      expected = String;
+      i++;
     } else if (i == line.length() - 1) {
       if (expected == String) {
         token temp(TokenType::String, tok);
@@ -97,6 +62,8 @@ void parser::Lex() {
         std::cout << tokens[i + 1].value << std::endl;
       } else if (tokens[i].value == "endl") {
         std::cout << std::endl;
+      } else if (tokens[i].value == "exec") {
+        Execute(tokens[i + 1].value);
       }
     } else if (tokens[i].type == Filename) {
       if (tokens[i + 1].type != Path) {
@@ -114,13 +81,16 @@ void parser::Lex() {
 
 void parser::ParseFiles(file f) {
   std::cout << f.currentLocation << " -> " << f.realLocation << std::endl;
+  f.currentLocation.insert(0, pkg::GetCacheFolder() + "/");
   replace(f.realLocation, "$HOME", GetEnv("HOME"));
+
   if (!fileExist(f.currentLocation)) {
     std::cout << "Bad definition in index.sc!\n"
               << "File: " << f.currentLocation << " doesn't exist.\n"
               << "Exiting: file not found" << std::endl;
     exit(EXIT_FAILURE);
   }
+
   if (!folderExist(f.realLocation)) {
     std::cout << "Folder: " << getFolderName(f.realLocation)
               << " doesn't exists!\n"
@@ -128,5 +98,6 @@ void parser::ParseFiles(file f) {
     std::string mkdirCmd = "mkdir -p " + getFolderName(f.realLocation);
     Execute(mkdirCmd);
   }
+
   Execute("mv " + f.currentLocation + " " + f.realLocation);
 }

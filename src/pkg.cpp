@@ -1,26 +1,44 @@
+#include <fstream>
 #include <parser.hpp>
 #include <pkg.hpp>
 #include <string>
 #include <utility.hpp>
-#include <fstream>
 
-void pkg::Extract(std::string filename){
-    std::string temp = "tar -xf " + filename;
-    Execute(temp);
+std::string cache_folder;
+
+void pkg::SetCacheFolder() {
+  cache_folder = GetEnv("HOME") + "/.cache/rci";
+  CreateFolder(cache_folder);
 }
 
-void pkg::Clone(std::string url){
-    std::string temp = "git clone " + url;
-    Execute(temp);
+void pkg::Extract(std::string filename) {
+  std::cout << "Extracting package using tar..." << std::endl;
+  std::string temp = "tar -xf " + filename + " --directory=" + cache_folder;
+  Execute(temp);
 }
 
-void pkg::ReadIndex(){
-    std::ifstream file;
-    std::string line;
-    file.open("index.sc");
-    while(std::getline(file, line)){
-        parser::Parse(line);
-        parser::Lex();
-    }
-
+void pkg::Clone(std::string url) {
+  std::cout << "Cloning repository with git..." << std::endl;
+  std::string temp = "git clone " + url + " " + cache_folder;
+  Execute(temp);
 }
+
+void pkg::ReadIndex() {
+  std::cout << "Reading index file..." << std::endl;
+  std::ifstream file;
+  std::string line;
+  std::string index_file_location = cache_folder + "/index.sc";
+  file.open(index_file_location);
+  while (std::getline(file, line)) {
+    parser::Parse(line);
+    parser::Lex();
+  }
+  CleanUp();
+}
+
+void pkg::CleanUp() {
+  std::cout << "Cleaning up residual files..." << std::endl;
+  Execute("rm -rf " + cache_folder);
+}
+
+std::string pkg::GetCacheFolder() { return cache_folder; }
