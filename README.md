@@ -10,7 +10,9 @@ Rice Installer aims to provide a better solution for managing and installing dot
 
 ### An insight into working
 `rci` is the command line utility to use Rice Installer.
-`rci` can install dots from a tar packages as of now. It will eventually support Git repos too.
+
+`rci` can install dots from a tar packages and git repos.
+
 It read a file called `index.sc` situated in tar package's root.
 A typical `index.sc` looks something like this:
 ```
@@ -24,22 +26,27 @@ print Installing Zsh config and aliases
 zshrc=$HOME/.zshrc
 aliases=$HOME/.aliases
 endl
+print Installing fonts
+Iosevka.ttf=$HOME/.local/share/fonts/Iosevka.ttf
+exec fc-cache -fv
+endl
 print Installation finished.
 ```
 
-- Syntax
-`location of file in Tar package`=`location of file to move to`
+##### Syntax
+`location of file in Tar package or git repo`=`location of file to move to`
 
-The `rci`\'s Parser provide two builtin functions called `print` and `endl`.
+The `rci`\'s Parser provide three builtin functions called `print`, `endl` and `exec`.
 
 `print <string>` is used to print a string to standard output.
 
 `endl` is used to print a new line to standard output. (`print` function is unable to print newlines via `\n` character. Use this instead).
 
-### Installation?
-Nah mate. It's not even in alpha stage.
+`exec <command>` is used to execute `<command>`. Note that it can only execute binaries found in `$PATH` variable.
 
-It cannot execute required commands to install the rice such as `fc-cache -fv` which required sometimes for installing new fonts.
+### Installation?
+Rice installer is still in alpha stage and heavy development.
+Many features are still subject to change.
 
 You can try it out and help me develop it :D
 
