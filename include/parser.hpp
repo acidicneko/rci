@@ -8,13 +8,13 @@ enum TokenType {
   Path = 2,
   Function = 3,
   String = 4,
-  Command = 5
 };
 
 class token {
 public:
   TokenType type;
   std::string value;
+  bool pair = false;
   token(TokenType Type, std::string Value) {
     type = Type;
     value = Value;
@@ -31,6 +31,7 @@ namespace parser {
 
 void Parse(std::string line);
 void Lex();
+void LexFunction(std::string functionName);
 void ParseFiles(file f);
 void ParseFiles();
 

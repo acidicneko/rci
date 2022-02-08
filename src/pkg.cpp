@@ -23,7 +23,7 @@ void pkg::Clone(std::string url) {
   Execute(temp);
 }
 
-void pkg::ReadIndex() {
+void pkg::ReadIndex(std::string functionName) {
   std::cout << "Reading index file..." << std::endl;
   std::ifstream file;
   std::string line;
@@ -31,8 +31,9 @@ void pkg::ReadIndex() {
   file.open(index_file_location);
   while (std::getline(file, line)) {
     parser::Parse(line);
-    parser::Lex();
   }
+  parser::LexFunction(functionName);
+  file.close();
   CleanUp();
 }
 
