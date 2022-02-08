@@ -16,6 +16,8 @@ Rice Installer aims to provide a better solution for managing and installing dot
 It read a file called `index.sc` situated in tar package's root.
 A typical `index.sc` looks something like this:
 ```
+start i3
+
 print Installing i3 config
 i3/config=$HOME/.config/i3/config
 endl
@@ -31,7 +33,11 @@ Iosevka.ttf=$HOME/.local/share/fonts/Iosevka.ttf
 exec fc-cache -fv
 endl
 print Installation finished.
+
+stop i3
 ```
+
+Each and every `index.sc` should and must have atleast one function.
 
 ##### Syntax
 `location of file in Tar package or git repo`=`location of file to move to`
@@ -43,6 +49,10 @@ The `rci`\'s Parser provide three builtin functions called `print`, `endl` and `
 `endl` is used to print a new line to standard output. (`print` function is unable to print newlines via `\n` character. Use this instead).
 
 `exec <command>` is used to execute `<command>`. Note that it can only execute binaries found in `$PATH` variable.
+
+`start <function name>` is used to define the start of a new function.
+
+`stop <function name>` is used to close the function started with the `start` function. 
 
 ### Installation?
 Rice installer is still in alpha stage and heavy development.
@@ -58,9 +68,8 @@ And run `make all` in the project's root. The resulting binary is placed in `bui
 
 ### Usage
 ```
-./rci <name-of-tar-package>
+./rci <installType> <name-of-tar-package or git-repo-url> <function_name>
 ```
-As `rci` is unable to make folders according to its need, the user themselves have to create folders they specify in `index.sc`.
 
 <b>Arigatou.</b>
 
