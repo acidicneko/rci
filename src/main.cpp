@@ -4,6 +4,10 @@
 #include <pkg.hpp>
 
 int main(int argc, char **argv) {
+  if (argc < 2) {
+    std::cout << "Error: no install type defined." << std::endl;
+    return 1;
+  }
   std::string installType = argv[1];
 
   if (installType == "help") {
@@ -20,6 +24,10 @@ int main(int argc, char **argv) {
     std::cout << "Error: no target defined." << std::endl;
     return 1;
   }
+  if (argc < 4) {
+    std::cout << "Error: no function defined." << std::endl;
+    return 1;
+  }
 
   pkg::SetCacheFolder();
   if (installType == "tar") {
@@ -30,10 +38,6 @@ int main(int argc, char **argv) {
     std::cout << "Error: Unsupported install type: " << installType
               << std::endl;
     exit(EXIT_FAILURE);
-  }
-  if (argc < 4) {
-    std::cout << "Error: no function defined." << std::endl;
-    return 1;
   }
   pkg::ReadIndex(argv[3]);
   return 0;
