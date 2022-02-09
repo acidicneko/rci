@@ -3,11 +3,11 @@
 #include <iostream>
 
 enum TokenType {
-  Null = 0,
-  Filename = 1,
-  Path = 2,
-  Function = 3,
-  String = 4,
+  Null,
+  Filename,
+  Path,
+  Function,
+  String,
 };
 
 class token {
@@ -30,7 +30,6 @@ public:
 namespace parser {
 
 void Parse(std::string line);
-void Lex();
 void LexFunction(std::string functionName);
 void ParseFiles(file f);
 void ParseFiles();

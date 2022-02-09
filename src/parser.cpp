@@ -1,8 +1,8 @@
-#include "pkg.hpp"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <parser.hpp>
+#include <pkg.hpp>
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -67,38 +67,8 @@ void parser::Parse(std::string line) {
   }
 }
 
-void parser::Lex() {
-  bool functionRunning = false;
-  std::string functionName;
-  for (int i = 0; i < tokens.size(); i++) {
-    if (tokens[i].type == Function) {
-      if (tokens[i].value == "print") {
-        std::cout << tokens[i + 1].value << std::endl;
-      } else if (tokens[i].value == "endl") {
-        std::cout << std::endl;
-      } else if (tokens[i].value == "exec") {
-        Execute(tokens[i + 1].value);
-      } else if (tokens[i].value == "func") {
-        functionRunning = true;
-        functionName = tokens[i + 1].value;
-      }
-    } else if (tokens[i].type == Filename) {
-      if (tokens[i + 1].type != Path) {
-        std::cout << "ERROR: expected \"Path\"" << std::endl;
-        return;
-      }
-      file temp;
-      temp.currentLocation = tokens[i].value;
-      temp.realLocation = tokens[i + 1].value;
-      parser::ParseFiles(temp);
-    }
-  }
-  tokens.clear();
-}
-
 void parser::LexFunction(std::string functionName) {
   bool functionRunning = false;
-  int j = 0;
   std::vector<token> localTokens;
   for (int i = 0; i < tokens.size(); i++) {
     if (tokens[i].value == "start" && tokens[i + 1].value == functionName) {
