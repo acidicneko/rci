@@ -34,7 +34,6 @@ void pkg::ReadIndex(std::string functionName) {
   }
   parser::LexFunction(functionName);
   file.close();
-  CleanUp();
 }
 
 void pkg::CleanUp() {

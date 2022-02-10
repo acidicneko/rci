@@ -39,6 +39,9 @@ int main(int argc, char **argv) {
               << std::endl;
     exit(EXIT_FAILURE);
   }
-  pkg::ReadIndex(argv[3]);
+  for (int i = 3; i < argc; i++) {
+    pkg::ReadIndex(argv[i]);
+  }
+  pkg::CleanUp();
   return 0;
 }
