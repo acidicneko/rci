@@ -11,9 +11,9 @@ Rice Installer aims to provide a better solution for managing and installing dot
 ### An insight into working
 `rci` is the command line utility to use Rice Installer.
 
-`rci` can install dots from a tar packages and git repos.
+`rci` can install dots from tar packages and git repos.
 
-It read a file called `index.sc` situated in tar package's root.
+It read a file called `index.sc` situated in root of git repo or tar package.
 A typical `index.sc` looks something like this:
 ```
 start i3
@@ -42,7 +42,14 @@ Each and every `index.sc` should and must have atleast one function.
 ##### Syntax
 `location of file in Tar package or git repo`=`location of file to move to`
 
-The `rci`\'s Parser provide three builtin functions called `print`, `endl` and `exec`.
+The `rci`\'s Parser provide some builtin functions:
+- `print`
+- `endl`
+- `exec`.
+- `start`
+- `stop`
+- `call`
+
 
 `print <string>` is used to print a string to standard output.
 
@@ -53,6 +60,8 @@ The `rci`\'s Parser provide three builtin functions called `print`, `endl` and `
 `start <function name>` is used to define the start of a new function.
 
 `stop <function name>` is used to close the function started with the `start` function. 
+
+`call <function_name>` is used to call a function from another.
 
 ### Installation?
 Rice installer is still in alpha stage and heavy development.
@@ -68,7 +77,7 @@ And run `make all` in the project's root. The resulting binary is placed in `bui
 
 ### Usage
 ```
-./rci <installType> <name-of-tar-package or git-repo-url> <function_name>
+./rci <installType> <name-of-tar-package or git-repo-url> <function_names>
 ```
 
 <b>Arigatou.</b>
