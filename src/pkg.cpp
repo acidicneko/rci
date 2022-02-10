@@ -27,7 +27,7 @@ void pkg::ReadIndex(std::string functionName) {
   std::cout << "Reading index file..." << std::endl;
   std::ifstream file;
   std::string line;
-  std::string index_file_location = cache_folder + "/index.sc";
+  std::string index_file_location = cache_folder + "/index.rci";
   file.open(index_file_location);
   while (std::getline(file, line)) {
     parser::Parse(line);

@@ -128,7 +128,7 @@ void parser::ParseFiles(file f) {
   f.currentLocation.insert(0, pkg::GetCacheFolder() + "/");
 
   if (!fileExist(f.currentLocation)) {
-    std::cout << "Bad definition in index.sc!\n"
+    std::cout << "Bad definition in index.rci!\n"
               << "File: " << f.currentLocation << " doesn't exist.\n"
               << "Exiting: file not found" << std::endl;
     exit(EXIT_FAILURE);
