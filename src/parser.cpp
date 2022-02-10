@@ -14,8 +14,8 @@ std::vector<token> tokens;
 void parser::Parse(std::string line) {
   std::string tok;
   TokenType expected = Function;
-  int print = 0;
-
+  replace(line, "$HOME", GetEnv("HOME"));
+  replace(line, "$RCI", pkg::GetCacheFolder());
   for (int i = 0; i < line.length(); i++) {
     tok += line[i];
 
@@ -118,7 +118,7 @@ void parser::LexFunction(std::string functionName) {
 void parser::ParseFiles(file f) {
   std::cout << f.currentLocation << " -> " << f.realLocation << std::endl;
   f.currentLocation.insert(0, pkg::GetCacheFolder() + "/");
-  replace(f.realLocation, "$HOME", GetEnv("HOME"));
+  // replace(f.realLocation, "$HOME", GetEnv("HOME"));
 
   if (!fileExist(f.currentLocation)) {
     std::cout << "Bad definition in index.sc!\n"
