@@ -48,6 +48,12 @@ void parser::Parse(std::string line) {
       tokens.push_back(temp);
       expected = String;
       i++;
+    } else if (tok == "call" && expected == Function) {
+      tok = "";
+      token temp(TokenType::Function, "call");
+      tokens.push_back(temp);
+      expected = String;
+      i++;
     } else if (i == line.length() - 1) {
       if (expected == String) {
         token temp(TokenType::String, tok);
@@ -99,6 +105,8 @@ void parser::LexFunction(std::string functionName) {
         std::cout << std::endl;
       } else if (localTokens[i].value == "exec") {
         Execute(localTokens[i + 1].value);
+      } else if (localTokens[i].value == "call") {
+        LexFunction(localTokens[i + 1].value);
       }
     } else if (localTokens[i].type == Filename) {
       if (localTokens[i + 1].type != Path) {
@@ -118,7 +126,6 @@ void parser::LexFunction(std::string functionName) {
 void parser::ParseFiles(file f) {
   std::cout << f.currentLocation << " -> " << f.realLocation << std::endl;
   f.currentLocation.insert(0, pkg::GetCacheFolder() + "/");
-  // replace(f.realLocation, "$HOME", GetEnv("HOME"));
 
   if (!fileExist(f.currentLocation)) {
     std::cout << "Bad definition in index.sc!\n"
