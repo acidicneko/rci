@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <fstream>
 #include <parser.hpp>
 #include <pkg.hpp>
@@ -29,6 +30,11 @@ void pkg::ReadIndex(std::string functionName) {
   std::string line;
   std::string index_file_location = cache_folder + "/index.rci";
   file.open(index_file_location);
+  if (!file) {
+    std::cout << "Error: index.rci not found." << std::endl;
+    CleanUp();
+    exit(EXIT_FAILURE);
+  }
   while (std::getline(file, line)) {
     parser::Parse(line);
   }

@@ -84,6 +84,7 @@ void parser::LexFunction(std::string functionName) {
       if (tokens[i + 1].value != functionName && i == tokens.size()) {
         std::cout << "error: section end not found: " << functionName
                   << std::endl;
+        pkg::CleanUp();
         exit(EXIT_FAILURE);
       }
       if (tokens[i + 1].value == functionName)
@@ -95,6 +96,7 @@ void parser::LexFunction(std::string functionName) {
   if (!functionRunning) {
     std::cout << "error: section: " << functionName << " not found"
               << std::endl;
+    pkg::CleanUp();
     exit(EXIT_FAILURE);
   }
   for (int i = 0; i < localTokens.size(); i++) {
@@ -111,6 +113,7 @@ void parser::LexFunction(std::string functionName) {
     } else if (localTokens[i].type == Filename) {
       if (localTokens[i + 1].type != Path) {
         std::cout << "ERROR: expected \"Path\"" << std::endl;
+        pkg::CleanUp();
         return;
       }
       file temp;
@@ -131,6 +134,7 @@ void parser::ParseFiles(file f) {
     std::cout << "Bad definition in index.rci!\n"
               << "File: " << f.currentLocation << " doesn't exist.\n"
               << "Exiting: file not found" << std::endl;
+    pkg::CleanUp();
     exit(EXIT_FAILURE);
   }
 
