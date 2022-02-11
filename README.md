@@ -5,7 +5,7 @@ A noob\'s rice installer for Linux systems.
 As a Linux user who likes to hop a lot, I always have to go through the hassle of getting all my dots from Git repos and placing them manually in their place.
 One can argue that the same thing can be achieved by shell scripts, but scripts tend to be larger and slower.
 This program is written in C++, which is compiled and theoretically runs faster.
-Scripts are tedious and larger too. 
+
 Rice Installer aims to provide a better solution for managing and installing dots.
 
 ### An insight into working
@@ -13,8 +13,8 @@ Rice Installer aims to provide a better solution for managing and installing dot
 
 `rci` can install dots from tar packages and git repos.
 
-It read a file called `index.sc` situated in root of git repo or tar package.
-A typical `index.sc` looks something like this:
+It reads a file called `index.rci` situated in root of git repo or tar package.
+A typical `index.rci` looks something like this:
 ```
 start i3
 
@@ -37,12 +37,12 @@ print Installation finished.
 stop i3
 ```
 
-Each and every `index.sc` should and must have atleast one function.
+Each and every `index.rci` should and must have atleast one function.
 
-##### Syntax
+##### Syntax for index.rci
 `location of file in Tar package or git repo`=`location of file to move to`
 
-The `rci`\'s Parser provide some builtin functions:
+The `rci parser` provides some builtin functions:
 - `print`
 - `endl`
 - `exec`.
@@ -57,9 +57,9 @@ The `rci`\'s Parser provide some builtin functions:
 
 `exec <command>` is used to execute `<command>`. Note that it can only execute binaries found in `$PATH` variable.
 
-`start <function name>` is used to define the start of a new function.
+`start <function_name>` is used to define the start of a new function.
 
-`stop <function name>` is used to close the function started with the `start` function. 
+`stop <function_name>` is used to close the function started with the `start` function. 
 
 `call <function_name>` is used to call a function from another.
 
@@ -73,12 +73,21 @@ Clone this repository
 ```sh
 git clone https://github.com/clawbhaiya/rci.git
 ```
+Make a `build/` folder in the root directory of project.
 And run `make all` in the project's root. The resulting binary is placed in `build/` folder.
 
 ### Usage
+- Syntax
+```sh
+rci <installType> <name-of-tar-package or git-repo-url> <function_names>
 ```
-./rci <installType> <name-of-tar-package or git-repo-url> <function_names>
+
+- Example
+```sh
+rci git https://github.com/clawbhaiya/dotfiles.git common i3
 ```
+The above example runs two functions namely `common` and `i3`.
+
 
 <b>Arigatou.</b>
 
