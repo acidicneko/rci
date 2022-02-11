@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <parser.hpp>
 #include <pkg.hpp>
@@ -9,6 +10,11 @@ std::string cache_folder;
 
 void pkg::SetCacheFolder() {
   cache_folder = GetEnv("HOME") + "/.cache/rci";
+  std::filesystem::path cache_folder_path = cache_folder;
+  if (std::filesystem::is_directory(cache_folder_path)) {
+    std::cout << "Info: junk cache found." << std::endl;
+    pkg::CleanUp();
+  }
   CreateFolder(cache_folder);
 }
 
@@ -32,7 +38,7 @@ void pkg::ReadIndex(std::string functionName) {
   file.open(index_file_location);
   if (!file) {
     std::cout << "Error: index.rci not found." << std::endl;
-    CleanUp();
+    pkg::CleanUp();
     exit(EXIT_FAILURE);
   }
   while (std::getline(file, line)) {
