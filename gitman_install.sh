@@ -1,14 +1,12 @@
 #!/bin/bash
 
-DEFAULT_ROOT_LOCATION="$HOME"/.local/share/gitman
-
 install() {
 	make -j $(nproc)
-	mv build/rci "$DEFAULT_ROOT_LOCATION"/bin/rci
+	mv build/rci "$GITMAN_BIN"/rci
 }
 
 uninstall() {
-	rm "$DEFAULT_ROOT_LOCATION"/bin/rci
+	rm "$GITMAN_BIN"/rci
 }
 
 
