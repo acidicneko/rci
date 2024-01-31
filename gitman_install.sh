@@ -9,7 +9,6 @@ install() {
 
 uninstall() {
 	rm "$DEFAULT_ROOT_LOCATION"/bin/rci
-	rm -rf "$DEFAULT_ROOT_LOCATION"/packages/rci
 }
 
 if [ "$1" = "install" ] ; then
