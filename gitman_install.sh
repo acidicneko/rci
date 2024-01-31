@@ -12,7 +12,6 @@ uninstall() {
 }
 
 
-cd /tmp/rci
 if [ "$1" = "install" ] ; then
 	install
 elif [ "$1" = "uninstall" ] ; then
