@@ -11,6 +11,8 @@ uninstall() {
 	rm "$DEFAULT_ROOT_LOCATION"/bin/rci
 }
 
+
+cd /tmp/rci
 if [ "$1" = "install" ] ; then
 	install
 elif [ "$1" = "uninstall" ] ; then
